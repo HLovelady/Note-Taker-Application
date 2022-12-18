@@ -6,6 +6,12 @@ const path = require("path");
 //Use express
 const app = express()
 
+
+//Set up data parsing, and use middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static('public'));
+
 //get request for home page
 app.get('/', (req, res) => {
     res.send(`

@@ -3,6 +3,8 @@ const express = require("express");
 const fs = require("fs");
 const path = require("path");
 
+const PORT = 3001;
+
 //Use express
 const app = express()
 
@@ -21,5 +23,7 @@ app.get('/notes', (req, res) =>
   res.sendFile(path.join(__dirname, './develop/public/notes.html'))
 );
 
-
-app.listen(3001)
+//listener
+app.listen(PORT, () =>
+  console.log(`App listening at http://localhost:${PORT}`)
+);

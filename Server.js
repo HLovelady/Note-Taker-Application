@@ -44,9 +44,20 @@ fs.writeFileSync('db/db.json', JSON.stringify(db));
 res.json(db);
 
 
-//delete
+
 
 });
+
+// Delete: (/api/notes/:id) should receive query parameter that contains the id of a note to delete
+  app.delete('/api/notes/:id', (req, res) => {
+    // notes from database "db.json" read
+    let db = JSON.parse(fs.readFileSync('db/db.json'))
+    // note with id removed
+    let deleteNotes = db.filter(item => item.id !== req.params.id);
+    // note written to database "db.json" with note deleted
+    fs.writeFileSync('db/db.json', JSON.stringify(deleteNotes));
+    res.json(deleteNotes); 
+  });
 
 //listener
 app.listen(PORT, () =>

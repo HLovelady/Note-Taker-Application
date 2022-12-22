@@ -24,15 +24,29 @@ app.get('/notes', (req, res) =>
 );
 
 
-//express api routes
-//post
-app.post('.api/notes', (req,res)=>{
-  res.send('Got a POST request')
-});
+//post: file '/api/notes' to receive newly created note to save on the request body, 
+app.post('/api/notes', (req, res) => {
+  let db = fs.readFileSync('db/db.json');
+  db = JSON.parse(db);
+  // add it to the db.json file, and then return the new note to the client. 
+  res.json(db);
+  // creating note body
+  let userNote = {
+    title: req.body.title,
+    text: req.body.text,
+    // creating note unique id
+    id: uniqid(),
+  };
 
-//push
+// push: created note which will be written in database "db.json"
+db.push(userNote);
+fs.writeFileSync('db/db.json', JSON.stringify(db));
+res.json(db);
+
 
 //delete
+
+});
 
 //listener
 app.listen(PORT, () =>

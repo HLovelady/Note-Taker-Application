@@ -33,28 +33,31 @@ app.post('/notes', (req, res) => {
   // add it to the db.json file, and then return the new note to the client. 
   res.json(db);
   // creating note body
-  let userNote = {
+  let newNote = {
     title: req.body.title,
     text: req.body.text,
     // creating note unique id
     id: uniqid(),
   };
 
-// push: created note which will be written in database "db.json"
-db.push(userNote);
-fs.writeFileSync('db/db.json', JSON.stringify(db));
-res.json(db);
+  
+// pushing new note: created note will be written in database "db.json"
+database.push(newNote);
+fs.writeFileSync('db/db.json', JSON.stringify(database));
+res.json(database);
 });
 
-// Delete: (/api/notes/:id) should receive query parameter that contains the id of a note to delete
-  app.delete('/api/notes/:id', (req, res) => {
+
+
+// Delete: (/notes/:id) should receive query parameter that contains the id of a note to delete
+  app.delete('/notes/:id', (req, res) => {
     // notes from database "db.json" read
     let db = JSON.parse(fs.readFileSync('db/db.json'))
     // note with id removed
     let deleteNotes = db.filter(item => item.id !== req.params.id);
     // note written to database "db.json" with note deleted
     fs.writeFileSync('db/db.json', JSON.stringify(deleteNotes));
-    res.json(deleteNotes); 
+    res.json(deleteNotes);
   });
 
 

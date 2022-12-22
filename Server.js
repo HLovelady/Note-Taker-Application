@@ -2,8 +2,9 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+const database = require('./db/db.json');
 
-const PORT = 3001;
+var PORT = process.env.PORT || 3001;
 
 //Use express
 const app = express()
@@ -24,8 +25,9 @@ app.get('/notes', (req, res) =>
 );
 
 
-//post: file '/api/notes' to receive newly created note to save on the request body, 
-app.post('/api/notes', (req, res) => {
+
+//post: file '/notes' to receive newly created note to save on the request body, 
+app.post('/notes', (req, res) => {
   let db = fs.readFileSync('db/db.json');
   db = JSON.parse(db);
   // add it to the db.json file, and then return the new note to the client. 
@@ -42,10 +44,6 @@ app.post('/api/notes', (req, res) => {
 db.push(userNote);
 fs.writeFileSync('db/db.json', JSON.stringify(db));
 res.json(db);
-
-
-
-
 });
 
 // Delete: (/api/notes/:id) should receive query parameter that contains the id of a note to delete
@@ -58,6 +56,8 @@ res.json(db);
     fs.writeFileSync('db/db.json', JSON.stringify(deleteNotes));
     res.json(deleteNotes); 
   });
+
+
 
 //listener
 app.listen(PORT, () =>

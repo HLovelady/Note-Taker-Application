@@ -27,30 +27,50 @@ app.get('/notes', (req, res) =>
 
 
 //post: file '/notes' to receive newly created note to save on the request body, 
-app.post('/notes', (req, res) => {
-  let db = fs.readFileSync('db/db.json');
-  db = JSON.parse(db);
-  // add it to the db.json file, and then return the new note to the client. 
-  res.json(db);
-  // creating note body
-  let newNote = {
-    title: req.body.title,
-    text: req.body.text,
-    // creating note unique id
-    id: uniqid(),
-  };
+// POST request to add a review
+app.post('/api/notes', (req, res) => {
+  // Log that a POST request was received
+  console.info(`${req.method} request received to add a note`);
 
-  
+  // Prepare a response object to send back to the client
+  let response;
+  let db;
+
+  // Check if there is anything in the response body
+  if (req.body) {
+    db = JSON.parse(fs.readFileSync('db/db.json'))
+    db.push(req.body)
+    console.log(db)
+
+
+
+
+
+    response = {
+      status: 'success',
+      data: req.body,
+    };
+    res.status(201).json(response);
+  } else {
+    res.status(400).json('Request body must at least contain a title');
+  }
+
+  // Log the response body to the console
+  console.log(req.body);
+const stringify = JSON.stringify(db)
+  console.log('stringify', stringify)
 // pushing new note: created note will be written in database "db.json"
-database.push(newNote);
-fs.writeFileSync('db/db.json', JSON.stringify(database));
-res.json(database);
+fs.writeFileSync('db/db.json', stringify);
+
+
+
+res.json(db);
 });
 
 
 
 // Delete: (/notes/:id) should receive query parameter that contains the id of a note to delete
-  app.delete('/notes/:id', (req, res) => {
+  app.delete('/api/notes/:id', (req, res) => {
     // notes from database "db.json" read
     let db = JSON.parse(fs.readFileSync('db/db.json'))
     // note with id removed
